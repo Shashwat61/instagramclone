@@ -8,17 +8,26 @@ import {
     MenuIcon,
     HomeIcon,
 } from '@heroicons/react/outline'
-
+import { signIn, signOut, useSession } from "next-auth/client"
+import { Fragment } from 'react'
+import { useRouter } from 'next/router'
+import { useRecoilState } from 'recoil'
+import { modalState } from '../atoms/modalAtom'
 function Header() {
+    const [session]=useSession()
+    const router=useRouter()
+    const [open,setOpen]=useRecoilState(modalState)
+    
+    console.log(session)
     return (
         <div className="sticky top-0 z-50 bg-white border-b shadow-sm">
             <div className="flex justify-between max-w-6xl mx-5 bg-white lg:mx-auto">
             {/* left */}
-            <div className="relative hidden w-24 lg:inline-grid">
+            <div onClick={()=>router.push('/')} className="relative hidden w-24 lg:inline-grid">
                 <Image src="https://links.papareact.com/ocw" layout="fill" objectFit="contain" />
             </div>
             
-            <div className="relative flex-shrink-0 w-10 cursor-pointer lg:hidden">
+            <div onClick={()=>router.push('/')} className="relative flex-shrink-0 w-10 cursor-pointer lg:hidden">
                 <Image src="https://links.papareact.com/jjm" layout="fill" objectFit="contain" />
             </div>
             
@@ -35,21 +44,28 @@ function Header() {
             {/* right */}
 
             <div className="flex items-center justify-end space-x-4">
-            <HomeIcon className="navBtn" />
+            <HomeIcon onClick={()=>router.push('/')} className="navBtn" />
             <MenuIcon className="h-6 cursor-pointer md:hidden" />
-            <div className="relative navBtn">
-            <PaperAirplaneIcon className="rotate-45 navBtn" />
-            <div className="absolute flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full animate-pulse -top-2 -right-2">3</div>
+            {session ? (
+                <Fragment>
+                <div className="relative navBtn">
+                <PaperAirplaneIcon className="rotate-45 navBtn" />
+                <div className="absolute flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full animate-pulse -top-2 -right-2">3</div>
+                    
+                </div>
+                <PlusCircleIcon onClick={()=>setOpen(true)} className="navBtn" />
+                <UserGroupIcon className="navBtn" />
+                <HeartIcon className="navBtn" />
+                <img src={session.user.image} onClick={()=>signOut()} alt="profile pic" className="w-10 h-10 rounded-full cursor-pointer" />
+                </Fragment>
                 
-            </div>
-            <PlusCircleIcon className="navBtn" />
-            <UserGroupIcon className="navBtn" />
-            <HeartIcon className="navBtn" />
-            <img src="https://links.papareact.com/3ke" alt="profile pic" className="h-10 rounded-full cursor-pointer" />
-            
-            </div>
-            
-            </div>
+            ):(
+                <button onClick={()=>signIn()}>Sign In</button>
+                )
+            }
+                </div>
+                
+                </div>
         </div>
     )
 }
