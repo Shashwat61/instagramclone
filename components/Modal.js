@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { Dialog, Transition } from "@headlessui/react"
 import { CameraIcon } from "@heroicons/react/outline"
 import { Fragment, useRef, useState } from "react"

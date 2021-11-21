@@ -13,7 +13,7 @@ export default function SignIn({providers}) {
 
       {Object.values(providers).map((provider) => (
         <div key={provider.name}>
-          <button className="p-3 text-white bg-blue-500 rounded-lg" onClick={() => signIn(provider.id,{callbackUrl:'http://localhost:3000/'})}>
+          <button className="p-3 text-white bg-blue-500 rounded-lg" onClick={() => signIn(provider.id,{callbackUrl:'/'})}>
             Sign in with {provider.name}
           </button>
         </div>
